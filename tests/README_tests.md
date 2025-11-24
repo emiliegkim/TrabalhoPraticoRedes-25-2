@@ -1,23 +1,30 @@
-# Testes Automatizados - PatientsOnFIRE
+# Testes de Integração - PatientsOnFIRE
 
+**Responsável:** Mariana Luísa
 **Objetivo:** Validar se a API REST do servidor cumpre o contrato definido e a especificação FHIR simplificada.
-
-Este diretório contém os testes automatizados que simulam um cliente real consumindo os endpoints do servidor. Eles tratam o servidor como uma "caixa preta", testando apenas as entradas (Requisições HTTP) e saídas (Respostas, Status Codes e Headers).
 
 ---
 
-## Pré-requisitos
+## 📋 Pré-requisitos
 
-Para rodar estes testes, o ambiente do servidor precisa ter as bibliotecas de teste instaladas.
+Para rodar os testes, você deve preparar o ambiente na pasta de testes:
 
-1. Navegue até a pasta do servidor:
+1. Navegue até a pasta de testes:
    ```bash
-   cd server
+   cd tests
 
 
-2.  Instale as dependências de desenvolvimento (Jest e Supertest):
+2. Criar um arquivo de configuração temporário:
     ```bash
-    npm install --save-dev jest supertest
+    npm init -y
+
+3. Instale as dependências de desenvolvimento (Jest e Supertest):
+    ```bash
+    npm install jest supertest
+
+4. Rodar o teste:
+    ```bash
+    npx jest patient.test.js
 
 -----
 

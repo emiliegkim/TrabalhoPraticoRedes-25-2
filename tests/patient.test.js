@@ -91,16 +91,30 @@ describe('Testes de Integração API PatientsOnFIRE', () => {
         });
     });
 
+    // // 4. Teste de Listagem de IDs (GET /PatientIDs)
+    // describe('GET /PatientIDs', () => {
+    //     it('Deve retornar lista de IDs (200 OK) quando há pacientes', async () => {
+    //         const res = await request(app).get('/PatientIDs');
+    //         expect(res.statusCode).toEqual(200);
+    //         expect(Array.isArray(res.body)).toBeTruthy();
+    //         expect(res.body).toContain(createdPatientId);
+    //     });
+    // });
+
     // 4. Teste de Listagem de IDs (GET /PatientIDs)
     describe('GET /PatientIDs', () => {
         it('Deve retornar lista de IDs (200 OK) quando há pacientes', async () => {
             const res = await request(app).get('/PatientIDs');
             expect(res.statusCode).toEqual(200);
-            expect(Array.isArray(res.body)).toBeTruthy();
-            expect(res.body).toContain(createdPatientId);
+            expect(Array.isArray(res.body)).toBeTruthy(); 
+            
+            const idProcurado = Number(createdPatientId);
+            const listaIds = res.body.map(id => Number(id));
+            
+            expect(listaIds).toContain(idProcurado);
         });
     });
-
+    
     // 5. Teste de Exclusão (DELETE)
     describe('DELETE /Patient/:id', () => {
         it('Deve deletar o paciente e retornar 204 No Content', async () => {

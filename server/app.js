@@ -21,6 +21,14 @@ app.use((req, res) => {
   res.status(404).json({ error: "Not Found" });
 });
 
-app.listen(PORT, () => {
-  console.log(`PatientsOnFIRE rodando em http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`PatientsOnFIRE rodando em http://localhost:${PORT}`);
+// });
+
+if (require.main === module) {
+    app.listen(PORT, () => {
+      console.log(`PatientsOnFIRE rodando em http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
