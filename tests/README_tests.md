@@ -18,28 +18,18 @@ Para rodar os testes, você deve preparar o ambiente na pasta de testes:
     ```bash
     npm init -y
 
-3. Instale as dependências de desenvolvimento (Jest e Supertest):
-    ```bash
-    npm install jest supertest
-
-4. Rodar o teste:
-    ```bash
-    npx jest patient.test.js
-
 -----
 
 ## 🚀 Como Rodar os Testes
 
-Estando na pasta `/server`, execute o comando:
-
-```bash
-npm test
-```
+Instale as dependências de desenvolvimento (Jest e Supertest):
+    ```bash
+    npm install jest supertest
 
 
-```bash
-npx jest ../tests/patient.test.js
-```
+Rodar o teste:
+    ```bash
+    npx jest patient.test.js
 
 -----
 
