@@ -1,8 +1,7 @@
 const BASE_URL = "http://localhost:3000";
 
-// LISTAR TODOS OS PACIENTES
 async function loadPatients() {
-  const tbody = document.querySelector("#secPaciente tbody");
+  const tbody = document.getElementById("tabelaPacientes");
   tbody.innerHTML = "";
 
   const resp = await fetch(`${BASE_URL}/PatientIDs`);
@@ -21,12 +20,13 @@ async function loadPatients() {
 
     if (patientResp.status === 200) {
       const p = await patientResp.json();
+      const name = Array.isArray(p.name) ? p.name[0].text || p.name[0].given?.join(" ") || "" : p.name;
 
       const tr = document.createElement("tr");
 
       tr.innerHTML = `
         <td>${id}</td>
-        <td>${p.name}</td>
+        <td>${name}</td>
         <td>${p.birthDate}</td>
         <td>${p.gender}</td>
         <td>
@@ -40,7 +40,6 @@ async function loadPatients() {
   }
 }
 
-// CADASTRAR PACIENTE 
 async function createPatient() {
   const patient = {
     resourceType: "Patient",
@@ -58,6 +57,7 @@ async function createPatient() {
 
   if (resp.status === 201) {
     alert("Paciente cadastrado com sucesso!");
+    closeAndClearCreateModal();
     loadPatients();
   } else {
     const err = await resp.json();
@@ -65,15 +65,14 @@ async function createPatient() {
   }
 }
 
-// intercepta o submit do modal de cadastro
 document.querySelector("#modal form").addEventListener("submit", (e) => {
   e.preventDefault();
   createPatient();
 });
 
-//MODAL DE EDIÇÃO E BUSCA
-async function buscarPorId() {
-  const id = document.getElementById("buscarId").value;
+async function buscarPorId(idFromButton) {
+  const id = idFromButton || document.getElementById("buscarId").value;
+  
 
   if (!id) {
     alert("Digite um ID válido!");
@@ -85,33 +84,24 @@ async function buscarPorId() {
   if (resp.status === 200) {
     const p = await resp.json();
 
-    // Abrir modal de edição com os dados carregados
     document.getElementById("idPacienteEditar").value = id;
-    document.getElementById("nomePacienteEditar").value = p.name;
+    document.getElementById("nomePacienteEditar").value = Array.isArray(p.name) ? p.name[0].text || p.name[0].given?.join(" ") || "" : p.name;
     document.getElementById("generoEditar").value = p.gender;
     document.getElementById("dataNascimentoEditar").value = p.birthDate;
-    document.getElementById("telefoneEditar").value = p.telefone || "";
-    document.getElementById("enderecoEditar").value = p.endereco || "";
 
-    if (p.active) {
-      document.getElementById("ativoEditar1").checked = true;
-    } else {
-      document.getElementById("ativoEditar2").checked = true;
-    }
-
-    // abre o modal
     const modal = new bootstrap.Modal(document.getElementById("modalEditar"));
     modal.show();
 
-  } else if (resp.status === 404) {
-    alert("Paciente não encontrado!");
   } else {
-    const err = await resp.json();
-    alert(`Erro ${resp.status}: ${err.error}`);
+    alert("Paciente não encontrado!");
   }
 }
 
-// SALVAR ALTERAÇÕES (PUT)
+
+function openEdit(id) {
+  buscarPorId(id);
+}
+
 async function updatePatient() {
   const id = document.getElementById("idPacienteEditar").value;
 
@@ -131,6 +121,7 @@ async function updatePatient() {
 
   if (resp.status === 200) {
     alert("Paciente atualizado!");
+    closeAndClearEditModal();
     loadPatients();
   } else {
     const err = await resp.json();
@@ -145,7 +136,6 @@ document
     updatePatient();
   });
 
-// DELETAR PACIENTE 
 async function deletePatient(id) {
   if (!confirm("Deseja realmente deletar este paciente?")) return;
 
@@ -162,7 +152,24 @@ async function deletePatient(id) {
   }
 }
 
-//INICIALIZAÇÃO 
 window.onload = () => {
   loadPatients();
 };
+
+function closeAndClearCreateModal() {
+  const modalEl = document.getElementById("modal");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+
+  modal.hide();
+
+  document.querySelector("#modal form").reset();
+}
+
+function closeAndClearEditModal() {
+  const modalEl = document.getElementById("modalEditar");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+
+  modal.hide();
+
+  document.querySelector("#modalEditar form").reset();
+}
