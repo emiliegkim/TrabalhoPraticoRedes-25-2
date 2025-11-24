@@ -22,12 +22,12 @@ Para rodar os testes, você deve preparar o ambiente na pasta de testes:
 
 ## 🚀 Como Rodar os Testes
 
-Instale as dependências de desenvolvimento (Jest e Supertest):
+1. Instale as dependências de desenvolvimento (Jest e Supertest):
     ```bash
     npm install jest supertest
 
 
-Rodar o teste:
+2. Rodar o teste:
     ```bash
     npx jest patient.test.js
 
